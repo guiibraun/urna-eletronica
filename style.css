@@ -110,6 +110,7 @@ body {
     justify-content: center;
     align-items: center;
     font-size: 25px;
+    margin-right: 3px
 }
 
 .numero.pisca{
