@@ -113,8 +113,8 @@ body {
     margin-right: 3px
 }
 
-.numero.pisca{
-    animation: pisca 1s infinite ;
+.pisca{
+    animation: pisca .7s infinite ;
 }
 
 .d-1-4{
@@ -166,4 +166,8 @@ body {
     100% {
         opacity: 0.2;
     }
+}
+
+.aviso--gigante{
+    font-size: 40px;
 }

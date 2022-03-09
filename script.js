@@ -13,10 +13,14 @@ let numeros = document.querySelector('.d-1-3')
 
 let etapaAtual = 0
 let numeroAtual = ''
+let votoBranco = false
+let votos = []
 
 function comecarEtapa(){
     let etapa = etapas[etapaAtual]
     let numeroHtml = ''
+    numeroAtual = ''
+    votoBranco = false
 
     for(let i=0;i<etapa.numeros;i++){
         if(i === 0){
@@ -52,17 +56,23 @@ function atualizaInterface() {
 
             let fotosHtl = ''
             for(let i in candidato.fotos){
-                fotosHtl = `<div class="d-1-right"><div class="d-1-image"><img src="images/${candidato.fotos[i].url}" alt="" srcset="">${candidato.fotos[i].legenda}</div></div>`
+                if(candidato.fotos[i].small) {
+                    fotosHtl += `<div class="d-1-image small"><img src="images/${candidato.fotos[i].url}" alt="" srcset="">${candidato.fotos[i].legenda}</div>`
+                } else {
+                    fotosHtl += `<div class="d-1-image"><img src="images/${candidato.fotos[i].url}" alt="" srcset="">${candidato.fotos[i].legenda}</div>`
+                }
+                
             }
             lateral.innerHTML = fotosHtl
         } else {
             seuVotoPara.style.display = 'flex'
             aviso.style.display = 'flex'
-            descricao.innerHTML = '<div class="voto--nulo">VOTO NULO</div>'
+            descricao.innerHTML = '<div class="voto--nulo aviso--gigante pisca">VOTO NULO</div>'
         }
 
     console.log(candidato)
 }
+
 
 function clicou(numeroTeclado) {
     let numeroUrna = document.querySelector('.numero.pisca')
@@ -81,15 +91,48 @@ function clicou(numeroTeclado) {
 }
 
 function branco(){
-
+    if(numeroAtual === ''){
+        votoBranco = true
+        seuVotoPara.style.display = 'flex'
+        aviso.style.display = 'flex'
+        numeros.innerHTML = ''
+        descricao.innerHTML = 'Voto em branco'
+        lateral.innerHTML = ''
+    } else {
+        alert('Para votar em branco não pode ter digitado nenhum número')
+    }
 }
 
 function corrige(){
-
+    comecarEtapa()
 }
 
 function confirma(){
+    let etapa = etapas[etapaAtual]
+    let votoConfirmado = false
+    if(votoBranco === true){
+        votoConfirmado = true
+        votos.push({
+            etapa: etapas[etapaAtual].titulo,
+            voto: 'branco'
+        })
+    } else if(numeroAtual.length === etapa.numeros) {
+        votoConfirmado = true
+        votos.push({
+            etapa: etapas[etapaAtual].titulo,
+            voto: numeroAtual
+        })
+    }
 
+    if(votoConfirmado){
+        etapaAtual++
+        if(etapas[etapaAtual] !== undefined){
+            comecarEtapa()
+        } else {
+            document.querySelector('.tela').innerHTML = '<div class="aviso--gigante pisca">FIM</div>'
+            console.log(votos)
+        }
+    }
 }
 
 comecarEtapa()
